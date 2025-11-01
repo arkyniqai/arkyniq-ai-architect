@@ -5,17 +5,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Phone, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
 const Contact = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     company: "",
-    message: "",
+    message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -24,22 +24,24 @@ const Contact = () => {
     setTimeout(() => {
       toast({
         title: "Message Sent!",
-        description: "We'll get back to you within 24 hours.",
+        description: "We'll get back to you within 24 hours."
       });
-      setFormData({ name: "", email: "", company: "", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        message: ""
+      });
       setIsSubmitting(false);
     }, 1000);
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
   };
-
-  return (
-    <section id="contact" className="py-24 relative overflow-hidden">
+  return <section id="contact" className="py-24 relative overflow-hidden">
       {/* Background Decoration */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent"></div>
 
@@ -63,9 +65,7 @@ const Contact = () => {
                   <Mail className="w-6 h-6 text-primary" />
                 </div>
                 <CardTitle className="font-heading">Email Us</CardTitle>
-                <CardDescription>
-                  hello@arkyniq.ai
-                </CardDescription>
+                <CardDescription>arkyniq.ai@gmail.com</CardDescription>
               </CardHeader>
             </Card>
 
@@ -105,30 +105,13 @@ const Contact = () => {
                     <label htmlFor="name" className="text-sm font-medium">
                       Full Name *
                     </label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="John Doe"
-                      required
-                      className="bg-input border-border focus:border-primary"
-                    />
+                    <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" required className="bg-input border-border focus:border-primary" />
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="email" className="text-sm font-medium">
                       Email Address *
                     </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="john@company.com"
-                      required
-                      className="bg-input border-border focus:border-primary"
-                    />
+                    <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="john@company.com" required className="bg-input border-border focus:border-primary" />
                   </div>
                 </div>
 
@@ -136,37 +119,17 @@ const Contact = () => {
                   <label htmlFor="company" className="text-sm font-medium">
                     Company Name
                   </label>
-                  <Input
-                    id="company"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                    placeholder="Your Company Inc."
-                    className="bg-input border-border focus:border-primary"
-                  />
+                  <Input id="company" name="company" value={formData.company} onChange={handleChange} placeholder="Your Company Inc." className="bg-input border-border focus:border-primary" />
                 </div>
 
                 <div className="space-y-2">
                   <label htmlFor="message" className="text-sm font-medium">
                     Message *
                   </label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder="Tell us about your automation needs..."
-                    required
-                    rows={6}
-                    className="bg-input border-border focus:border-primary resize-none"
-                  />
+                  <Textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="Tell us about your automation needs..." required rows={6} className="bg-input border-border focus:border-primary resize-none" />
                 </div>
 
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-6 rounded-xl shadow-glow-cyan hover-glow-cyan"
-                >
+                <Button type="submit" disabled={isSubmitting} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-6 rounded-xl shadow-glow-cyan hover-glow-cyan">
                   {isSubmitting ? "Sending..." : "Send Message"}
                   <Send className="ml-2 w-5 h-5" />
                 </Button>
@@ -175,8 +138,6 @@ const Contact = () => {
           </Card>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Contact;
