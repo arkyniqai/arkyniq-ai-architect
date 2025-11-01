@@ -74,7 +74,7 @@ const Contact = () => {
                 </div>
                 <CardTitle className="font-heading">Call Us</CardTitle>
                 <CardDescription>
-                  +1 (555) 123-4567
+                  +91 9505032786
                 </CardDescription>
               </CardHeader>
             </Card>
