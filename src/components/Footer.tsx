@@ -41,7 +41,7 @@ const Footer = () => {
             <h4 className="text-lg font-heading font-semibold">Connect With Us</h4>
             <div className="space-y-2 text-sm">
               <p className="text-muted-foreground">arkyniq.ai@gmail.com</p>
-              <p className="text-muted-foreground">+1 (555) 123-4567</p>
+              <p className="text-muted-foreground">+1 (950) 503-2786</p>
             </div>
             <div className="flex gap-4 pt-2">
               <a href="#" className="w-10 h-10 rounded-lg bg-primary/10 hover:bg-primary/20 flex items-center justify-center transition-colors" aria-label="Email">
