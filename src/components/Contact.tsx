@@ -80,11 +80,7 @@ const Contact = () => {
             </Card>
 
             <Card className="bg-gradient-accent border-none">
-              <CardContent className="p-6">
-                <p className="text-sm text-primary-foreground/90 leading-relaxed">
-                  <strong className="text-primary-foreground">Quick Response:</strong> We typically respond within 2-4 hours during business hours.
-                </p>
-              </CardContent>
+              
             </Card>
           </div>
 
