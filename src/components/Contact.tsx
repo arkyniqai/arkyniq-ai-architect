@@ -20,20 +20,45 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      const response = await fetch("https://barim.app.n8n.cloud/webhook/new-lead", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          company: formData.company,
+          message: formData.message,
+          timestamp: new Date().toISOString(),
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Message Sent!",
+          description: "We'll get back to you within 24 hours."
+        });
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          message: ""
+        });
+      } else {
+        throw new Error("Failed to send message");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
       toast({
-        title: "Message Sent!",
-        description: "We'll get back to you within 24 hours."
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
       });
-      setFormData({
-        name: "",
-        email: "",
-        company: "",
-        message: ""
-      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
