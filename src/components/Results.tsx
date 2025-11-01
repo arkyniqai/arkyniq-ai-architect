@@ -1,54 +1,40 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Clock, DollarSign, CheckCircle2 } from "lucide-react";
-
-const metrics = [
-  {
-    icon: Clock,
-    value: "70%",
-    label: "Time Saved",
-    color: "text-primary"
-  },
-  {
-    icon: DollarSign,
-    value: "40%",
-    label: "Cost Reduced",
-    color: "text-secondary"
-  },
-  {
-    icon: CheckCircle2,
-    value: "95%",
-    label: "Accuracy Improved",
-    color: "text-primary"
-  },
-  {
-    icon: TrendingUp,
-    value: "24/7",
-    label: "Availability",
-    color: "text-secondary"
-  },
-];
-
+const metrics = [{
+  icon: Clock,
+  value: "70%",
+  label: "Time Saved",
+  color: "text-primary"
+}, {
+  icon: DollarSign,
+  value: "40%",
+  label: "Cost Reduced",
+  color: "text-secondary"
+}, {
+  icon: CheckCircle2,
+  value: "95%",
+  label: "Accuracy Improved",
+  color: "text-primary"
+}, {
+  icon: TrendingUp,
+  value: "24/7",
+  label: "Availability",
+  color: "text-secondary"
+}];
 const Results = () => {
-  return (
-    <section id="results" className="py-24 bg-card/30">
+  return <section id="results" className="py-24 bg-card/30">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-4xl md:text-5xl font-heading font-bold">
             Proven <span className="gradient-text">Impact Metrics</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Real results from businesses that deployed AI agents with Arkyniq
-          </p>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Real results from businesses that deployed AI Systems with Arkyniq</p>
         </div>
 
         {/* Metrics Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {metrics.map((metric, index) => (
-            <Card 
-              key={index}
-              className="bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-300 hover:shadow-glow-cyan text-center"
-            >
+          {metrics.map((metric, index) => <Card key={index} className="bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-300 hover:shadow-glow-cyan text-center">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-2">
                   <metric.icon className={`w-6 h-6 ${metric.color}`} />
@@ -60,8 +46,7 @@ const Results = () => {
                 </p>
                 <p className="text-muted-foreground">{metric.label}</p>
               </CardContent>
-            </Card>
-          ))}
+            </Card>)}
         </div>
 
         {/* Comparison Table */}
@@ -127,8 +112,6 @@ const Results = () => {
           </CardContent>
         </Card>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Results;
