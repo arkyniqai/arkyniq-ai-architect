@@ -51,9 +51,7 @@ const Contact = () => {
           <h2 className="text-4xl md:text-5xl font-heading font-bold">
             Let's <span className="gradient-text">Get Started</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Ready to automate your business with intelligent AI agents? Get in touch with us today.
-          </p>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Ready to automate your business with intelligent AI Systems? Get in touch with us today.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
