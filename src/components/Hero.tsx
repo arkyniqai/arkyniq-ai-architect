@@ -1,14 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import heroImage from "@/assets/hero-ai-automation.jpg";
-
 const Hero = () => {
   const scrollToContact = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('contact')?.scrollIntoView({
+      behavior: 'smooth'
+    });
   };
-
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Animated Background Gradient */}
       <div className="absolute inset-0 bg-gradient-hero">
         <div className="absolute inset-0 bg-gradient-glow opacity-50"></div>
@@ -16,11 +15,7 @@ const Hero = () => {
 
       {/* Hero Image Overlay */}
       <div className="absolute inset-0 opacity-20">
-        <img 
-          src={heroImage} 
-          alt="AI Automation Technology" 
-          className="w-full h-full object-cover"
-        />
+        <img src={heroImage} alt="AI Automation Technology" className="w-full h-full object-cover" />
       </div>
 
       {/* Content */}
@@ -40,28 +35,16 @@ const Hero = () => {
           </h1>
 
           {/* Subheading */}
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Arkyniq AI builds intelligent consultancy agents that automate workflows and elevate customer experience — 
-            from voice receptionists to sales agents.
-          </p>
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">Arkyniq AI builds intelligent consultancy agents that automate workflows and elevate customer experience —from virtual executive assistants to AI sales advisors.</p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-            <Button 
-              size="lg" 
-              className="group bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-6 text-lg rounded-xl shadow-glow-cyan hover-glow-cyan"
-              onClick={scrollToContact}
-            >
+            <Button size="lg" className="group bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-6 text-lg rounded-xl shadow-glow-cyan hover-glow-cyan" onClick={scrollToContact}>
               Automate Your Business Now
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="border-primary/50 hover:bg-primary/10 text-foreground font-semibold px-8 py-6 text-lg rounded-xl"
-              onClick={scrollToContact}
-            >
+            <Button size="lg" variant="outline" className="border-primary/50 hover:bg-primary/10 text-foreground font-semibold px-8 py-6 text-lg rounded-xl" onClick={scrollToContact}>
               Book a Demo
             </Button>
           </div>
@@ -86,8 +69,6 @@ const Hero = () => {
 
       {/* Decorative Elements */}
       <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-background to-transparent"></div>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;
