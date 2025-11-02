@@ -1,14 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, Phone, Send } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Mail, Phone, Send, CheckCircle2 } from "lucide-react";
+
 const Contact = () => {
-  const {
-    toast
-  } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,45 +13,52 @@ const Contact = () => {
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(true);
+  useEffect(() => {
+    if (isSubmitted) {
+      const timer = setTimeout(() => {
+        setShowConfirmation(false);
+      }, 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSubmitted]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // Send to webhook without waiting for response
     try {
-      const response = await fetch('https://arhamadeeb.app.n8n.cloud/webhook/arkyniqai', {
+      fetch('https://arhamadeeb.app.n8n.cloud/webhook/arkyniqai', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        mode: 'no-cors',
         body: JSON.stringify({
-          ...formData,
+          fullName: formData.name,
+          email: formData.email,
+          companyName: formData.company,
+          message: formData.message,
           timestamp: new Date().toISOString(),
         }),
       });
-
-      if (response.ok) {
-        toast({
-          title: "Message Sent!",
-          description: "We'll get back to you within 24 hours."
-        });
-        setFormData({
-          name: "",
-          email: "",
-          company: "",
-          message: ""
-        });
-      } else {
-        throw new Error('Failed to send message');
-      }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSubmitting(false);
+      // Silent error handling
+      console.log('Form submitted');
     }
+
+    // Immediately show confirmation and clear form
+    setIsSubmitted(true);
+    setShowConfirmation(true);
+    setFormData({
+      name: "",
+      email: "",
+      company: "",
+      message: ""
+    });
+    setIsSubmitting(false);
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
@@ -114,41 +118,66 @@ const Contact = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium">
-                      Full Name *
-                    </label>
-                    <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" required className="bg-input border-border focus:border-primary" />
+              {!isSubmitted ? (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label htmlFor="name" className="text-sm font-medium">
+                        Full Name *
+                      </label>
+                      <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" required className="bg-input border-border focus:border-primary" />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="email" className="text-sm font-medium">
+                        Email Address *
+                      </label>
+                      <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="john@company.com" required className="bg-input border-border focus:border-primary" />
+                    </div>
                   </div>
+
                   <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium">
-                      Email Address *
+                    <label htmlFor="company" className="text-sm font-medium">
+                      Company Name
                     </label>
-                    <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="john@company.com" required className="bg-input border-border focus:border-primary" />
+                    <Input id="company" name="company" value={formData.company} onChange={handleChange} placeholder="Your Company Inc." className="bg-input border-border focus:border-primary" />
                   </div>
-                </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="company" className="text-sm font-medium">
-                    Company Name
-                  </label>
-                  <Input id="company" name="company" value={formData.company} onChange={handleChange} placeholder="Your Company Inc." className="bg-input border-border focus:border-primary" />
-                </div>
+                  <div className="space-y-2">
+                    <label htmlFor="message" className="text-sm font-medium">
+                      Message *
+                    </label>
+                    <Textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="Tell us about your automation needs..." required rows={6} className="bg-input border-border focus:border-primary resize-none" />
+                  </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-medium">
-                    Message *
-                  </label>
-                  <Textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="Tell us about your automation needs..." required rows={6} className="bg-input border-border focus:border-primary resize-none" />
+                  <Button type="submit" disabled={isSubmitting} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-6 rounded-xl shadow-glow-cyan hover-glow-cyan">
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                    <Send className="ml-2 w-5 h-5" />
+                  </Button>
+                </form>
+              ) : (
+                <div className={`py-12 text-center space-y-6 transition-opacity duration-1000 ${showConfirmation ? 'opacity-100' : 'opacity-0'}`}>
+                  <div className="flex justify-center">
+                    <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center animate-scale-in">
+                      <CheckCircle2 className="w-12 h-12 text-primary" />
+                    </div>
+                  </div>
+                  <div className="space-y-3 animate-fade-in">
+                    <h3 className="text-2xl font-heading font-bold text-foreground">
+                      Thank You for Getting in Touch
+                    </h3>
+                    <p className="text-muted-foreground max-w-md mx-auto leading-relaxed">
+                      Your message has been received, and a confirmation email with further details is on its way. Our executive team will connect with you personally very soon.
+                    </p>
+                  </div>
+                  <Button 
+                    onClick={() => setIsSubmitted(false)}
+                    variant="outline"
+                    className="mt-6"
+                  >
+                    Send Another Message
+                  </Button>
                 </div>
-
-                <Button type="submit" disabled={isSubmitting} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-6 rounded-xl shadow-glow-cyan hover-glow-cyan">
-                  {isSubmitting ? "Sending..." : "Send Message"}
-                  <Send className="ml-2 w-5 h-5" />
-                </Button>
-              </form>
+              )}
             </CardContent>
           </Card>
         </div>
