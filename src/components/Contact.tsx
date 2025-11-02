@@ -20,20 +20,41 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      const response = await fetch('https://barim.app.n8n.cloud/webhook/new-lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          timestamp: new Date().toISOString(),
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Message Sent!",
+          description: "We'll get back to you within 24 hours."
+        });
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          message: ""
+        });
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
       toast({
-        title: "Message Sent!",
-        description: "We'll get back to you within 24 hours."
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive"
       });
-      setFormData({
-        name: "",
-        email: "",
-        company: "",
-        message: ""
-      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
@@ -41,22 +62,22 @@ const Contact = () => {
       [e.target.name]: e.target.value
     }));
   };
-  return <section id="contact" className="py-24 relative overflow-hidden">
+  return <section id="contact" className="py-12 md:py-24 relative overflow-hidden">
       {/* Background Decoration */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent"></div>
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16 space-y-4">
-          <h2 className="text-4xl md:text-5xl font-heading font-bold">
+        <div className="text-center mb-8 md:mb-16 space-y-3 md:space-y-4">
+          <h2 className="text-3xl md:text-5xl font-heading font-bold">
             Let's <span className="gradient-text">Get Started</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Ready to automate your business with intelligent AI Systems? Get in touch with us today.</p>
+          <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">Ready to automate your business with intelligent AI Systems? Get in touch with us today.</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
           {/* Contact Info Cards */}
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <Card className="bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all">
               <CardHeader>
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2">

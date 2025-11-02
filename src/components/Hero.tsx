@@ -7,7 +7,7 @@ const Hero = () => {
       behavior: 'smooth'
     });
   };
-  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+  return <section className="relative h-screen md:min-h-screen flex items-center justify-center overflow-hidden">
       {/* Animated Background Gradient */}
       <div className="absolute inset-0 bg-gradient-hero">
         <div className="absolute inset-0 bg-gradient-glow opacity-50"></div>
@@ -19,8 +19,8 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 py-20 text-center">
-        <div className="max-w-5xl mx-auto space-y-8 animate-slide-in-up">
+      <div className="relative z-10 container mx-auto px-4 py-12 md:py-20 text-center">
+        <div className="max-w-5xl mx-auto space-y-4 md:space-y-8 animate-slide-in-up">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-card/50 backdrop-blur-sm border border-primary/30 rounded-full text-sm font-medium">
             <Sparkles className="w-4 h-4 text-primary" />
@@ -28,23 +28,23 @@ const Hero = () => {
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-5xl md:text-7xl font-heading font-bold leading-tight">
+          <h1 className="text-3xl md:text-7xl font-heading font-bold leading-tight">
             Build Intelligent Agents That{" "}
             <span className="gradient-text">Think, Talk & Act</span>{" "}
             Like Your Best Team
           </h1>
 
           {/* Subheading */}
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">Arkyniq AI builds intelligent consultancy agents that automate workflows and elevate customer experience —from virtual executive assistants to AI sales advisors.</p>
+          <p className="text-base md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">Arkyniq AI builds intelligent consultancy agents that automate workflows and elevate customer experience —from virtual executive assistants to AI sales advisors.</p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-            <Button size="lg" className="group bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-6 text-lg rounded-xl shadow-glow-cyan hover-glow-cyan" onClick={scrollToContact}>
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center pt-2 md:pt-4">
+            <Button size="lg" className="group bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 py-5 md:px-8 md:py-6 text-base md:text-lg rounded-xl shadow-glow-cyan hover-glow-cyan w-full sm:w-auto" onClick={scrollToContact}>
               Automate Your Business Now
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             
-            <Button size="lg" variant="outline" className="border-primary/50 hover:bg-primary/10 text-foreground font-semibold px-8 py-6 text-lg rounded-xl" onClick={scrollToContact}>
+            <Button size="lg" variant="outline" className="border-primary/50 hover:bg-primary/10 text-foreground font-semibold px-6 py-5 md:px-8 md:py-6 text-base md:text-lg rounded-xl w-full sm:w-auto" onClick={scrollToContact}>
               Book a Demo
             </Button>
           </div>

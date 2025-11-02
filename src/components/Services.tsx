@@ -36,24 +36,25 @@ const services = [
 
 const Services = () => {
   return (
-    <section id="services" className="py-24 relative">
+    <section id="services" className="py-12 md:py-24 relative">
       <div className="container mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-16 space-y-4">
-          <h2 className="text-4xl md:text-5xl font-heading font-bold">
+        <div className="text-center mb-8 md:mb-16 space-y-3 md:space-y-4">
+          <h2 className="text-3xl md:text-5xl font-heading font-bold">
             Our <span className="gradient-text">AI Agent Solutions</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
             Specialized AI agents designed to automate every aspect of your business operations
           </p>
         </div>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Services - Mobile Horizontal Scroll, Desktop Grid */}
+        <div className="md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6 flex md:flex-none overflow-x-auto snap-x snap-mandatory gap-4 px-4 md:px-0 pb-4 scrollbar-thin">
           {services.map((service, index) => (
             <Card 
               key={index}
-              className="group bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-300 hover:shadow-elevated hover:-translate-y-2"
+              className="group bg-card/50 backdrop-blur-sm border-border hover:border-primary/50 transition-all duration-300 hover:shadow-elevated md:hover:-translate-y-2 min-w-[85vw] md:min-w-0 snap-center flex-shrink-0 animate-fade-in"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
               <CardHeader>
                 <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
