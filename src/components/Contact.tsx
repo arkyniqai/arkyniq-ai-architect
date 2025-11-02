@@ -21,7 +21,7 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('https://barim.app.n8n.cloud/webhook/new-lead', {
+      const response = await fetch('https://arhamadeeb.app.n8n.cloud/webhook/arkyniqai', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
