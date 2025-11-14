@@ -16,10 +16,11 @@ const ChatbotWidget = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
+  const WEBHOOK_URL = 'https://arkyniq-founder.app.n8n.cloud/webhook/chatbot';
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -40,132 +41,59 @@ const ChatbotWidget = () => {
     setInputValue('');
     setIsLoading(true);
 
+    // Show loading message
+    setMessages(prev => [
+      ...prev,
+      { role: 'assistant', content: 'Loading response…', timestamp: new Date() },
+    ]);
+
     try {
-      const response = await fetch(CHAT_URL, {
+      const conversationHistory = [...messages, userMessage].map(msg => ({
+        role: msg.role,
+        content: msg.content,
+      }));
+
+      const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({
-          messages: [...messages, userMessage].map(msg => ({
-            role: msg.role,
-            content: msg.content,
-          })),
+          user_message: userMessage.content,
+          session_id: sessionId,
+          conversation_history: conversationHistory,
         }),
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      if (!response.body) {
-        throw new Error('No response body');
-      }
+      const data = await response.json();
+      const assistantReply = data.assistant_reply || 'Sorry, I could not process your request.';
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let textBuffer = '';
-      let streamDone = false;
-      let assistantContent = '';
-
-      // Create initial assistant message
-      setMessages(prev => [
-        ...prev,
-        { role: 'assistant', content: '', timestamp: new Date() },
-      ]);
-
-      while (!streamDone) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        
-        textBuffer += decoder.decode(value, { stream: true });
-
-        let newlineIndex: number;
-        while ((newlineIndex = textBuffer.indexOf('\n')) !== -1) {
-          let line = textBuffer.slice(0, newlineIndex);
-          textBuffer = textBuffer.slice(newlineIndex + 1);
-
-          if (line.endsWith('\r')) line = line.slice(0, -1);
-          if (line.startsWith(':') || line.trim() === '') continue;
-          if (!line.startsWith('data: ')) continue;
-
-          const jsonStr = line.slice(6).trim();
-          if (jsonStr === '[DONE]') {
-            streamDone = true;
-            break;
-          }
-
-          try {
-            const parsed = JSON.parse(jsonStr);
-            const content = parsed.choices?.[0]?.delta?.content as string | undefined;
-            
-            if (content) {
-              assistantContent += content;
-              // Update the last assistant message
-              setMessages(prev => {
-                const newMessages = [...prev];
-                const lastMsg = newMessages[newMessages.length - 1];
-                if (lastMsg && lastMsg.role === 'assistant') {
-                  lastMsg.content = assistantContent;
-                }
-                return newMessages;
-              });
-            }
-          } catch (e) {
-            // Incomplete JSON, put it back
-            textBuffer = line + '\n' + textBuffer;
-            break;
-          }
-        }
-      }
-
-      // Final flush
-      if (textBuffer.trim()) {
-        for (let raw of textBuffer.split('\n')) {
-          if (!raw || raw.startsWith(':') || !raw.startsWith('data: ')) continue;
-          const jsonStr = raw.slice(6).trim();
-          if (jsonStr === '[DONE]') continue;
-          
-          try {
-            const parsed = JSON.parse(jsonStr);
-            const content = parsed.choices?.[0]?.delta?.content as string | undefined;
-            if (content) {
-              assistantContent += content;
-              setMessages(prev => {
-                const newMessages = [...prev];
-                const lastMsg = newMessages[newMessages.length - 1];
-                if (lastMsg && lastMsg.role === 'assistant') {
-                  lastMsg.content = assistantContent;
-                }
-                return newMessages;
-              });
-            }
-          } catch { /* ignore */ }
-        }
-      }
+      // Replace loading message with actual response
+      setMessages(prev => {
+        const newMessages = [...prev];
+        newMessages[newMessages.length - 1] = {
+          role: 'assistant',
+          content: assistantReply,
+          timestamp: new Date(),
+        };
+        return newMessages;
+      });
 
     } catch (error) {
       console.error('Error sending message:', error);
       
-      const errorMessage = error instanceof Error ? error.message : 'Failed to send message';
-      
       toast({
         title: 'Error',
-        description: errorMessage,
+        description: 'Failed to send message. Please try again.',
         variant: 'destructive',
       });
 
-      // Remove the empty assistant message if it exists
-      setMessages(prev => {
-        const newMessages = [...prev];
-        const lastMsg = newMessages[newMessages.length - 1];
-        if (lastMsg && lastMsg.role === 'assistant' && !lastMsg.content) {
-          newMessages.pop();
-        }
-        return newMessages;
-      });
+      // Remove loading message on error
+      setMessages(prev => prev.slice(0, -1));
     } finally {
       setIsLoading(false);
     }
@@ -232,18 +160,10 @@ const ChatbotWidget = () => {
                         : 'bg-muted text-foreground rounded-bl-sm'
                     }`}
                   >
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content || '...'}</p>
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
                   </div>
                 </div>
               ))}
-
-              {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
-                <div className="flex justify-start">
-                  <div className="bg-muted text-foreground rounded-2xl rounded-bl-sm px-4 py-2.5">
-                    <p className="text-sm text-muted-foreground">Thinking...</p>
-                  </div>
-                </div>
-              )}
             </div>
           </ScrollArea>
 
