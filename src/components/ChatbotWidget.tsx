@@ -20,7 +20,7 @@ const ChatbotWidget = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  const WEBHOOK_URL = 'https://arham-tech.app.n8n.cloud/webhook/lead-query';
+  const WEBHOOK_URL = 'https://arkyniq-founder.app.n8n.cloud/webhook/chatbot';
 
   useEffect(() => {
     if (scrollRef.current) {
