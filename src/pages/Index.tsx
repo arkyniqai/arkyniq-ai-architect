@@ -6,7 +6,6 @@ import ProcessAccordion from "@/components/ProcessAccordion";
 import AboutAccordion from "@/components/AboutAccordion";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import ChatbotWidget from "@/components/ChatbotWidget";
 
 const Index = () => {
   return (
@@ -19,7 +18,6 @@ const Index = () => {
       <AboutAccordion />
       <Contact />
       <Footer />
-      <ChatbotWidget />
     </main>
   );
 };
